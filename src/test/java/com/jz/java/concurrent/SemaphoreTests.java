@@ -3,13 +3,11 @@ package com.jz.java.concurrent;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 @Slf4j
-public class ConditionTests {
+public class SemaphoreTests {
     @Test
     public void test1() throws InterruptedException {
         BreadBox breadBox = new BreadBox();
@@ -45,41 +43,36 @@ public class ConditionTests {
 
     /**
      * 面包盒子
-     * 测试管程机制解决生产者/消费者问题
+     * 测试信号量机制解决生产者/消费者问题
      */
     @Slf4j
     static class BreadBox {
-        private static final Integer MAX_BREAD_COUNT = 10;
         private Integer breadCount = 0;
-        private Lock lock = new ReentrantLock();
-        private Condition empty = lock.newCondition();
-        private Condition full = lock.newCondition();
+        private Semaphore mutex = new Semaphore(1);
+        private Semaphore notEmpty = new Semaphore(0);
+        private Semaphore notFull = new Semaphore(10);
 
         public void product() throws InterruptedException {
-            lock.lock();
+            notFull.acquire();
+            mutex.acquire();
             try {
-                while (breadCount.equals(MAX_BREAD_COUNT)) {
-                    full.await();
-                }
                 breadCount++;
                 log.info("生产者{}生产一个面包，当前面包数：{}", Thread.currentThread().getId(), breadCount);
-                empty.signal();
             } finally {
-                lock.unlock();
+                mutex.release();
+                notEmpty.release();
             }
         }
 
         public void consume() throws InterruptedException {
-            lock.lock();
+            notEmpty.acquire();
+            mutex.acquire();
             try {
-                while (breadCount.equals(0)) {
-                    empty.await();
-                }
                 breadCount--;
                 log.info("消费者{}消费一个面包，当前面包数：{}", Thread.currentThread().getId(), breadCount);
-                full.signal();
             } finally {
-                lock.unlock();
+                mutex.release();
+                notFull.release();
             }
         }
     }
