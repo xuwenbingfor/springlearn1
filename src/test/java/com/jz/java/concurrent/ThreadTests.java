@@ -18,7 +18,7 @@ public class ThreadTests {
             log.info("thread is over");
         }, "测试线程");
         // 设置为守护线程
-        thread.setDaemon(true);
+//        thread.setDaemon(true);
         thread.start();
         log.info("{}", Thread.currentThread().isDaemon());
         log.info("main thread is start");
