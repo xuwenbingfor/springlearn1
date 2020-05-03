@@ -1,4 +1,4 @@
-package com.jz.util;
+package com.jz.spring.boot.util;
 
 import lombok.extern.slf4j.Slf4j;
 

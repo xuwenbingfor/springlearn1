@@ -1,4 +1,4 @@
-package com.jz.util;
+package com.jz.spring.boot.util;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;

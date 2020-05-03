@@ -12,10 +12,12 @@
     <artifactId>spring</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>spring</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Spring 学习 - Base On Spring Boot</description>
+    <packaging>pom</packaging>
 
     <properties>
         <java.version>13</java.version>
+        <skipTests>true</skipTests>
     </properties>
 
     <dependencies>
@@ -54,13 +56,8 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
+    <modules>
+        <module>spring-boot</module>
+    </modules>
 
 </project>

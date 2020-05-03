@@ -1,4 +1,4 @@
-package com.jz.spring;
+package com.jz;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -11,8 +11,11 @@ import java.util.Enumeration;
 
 @SpringBootTest
 @Slf4j
-class ApplicationTests {
+class BootApplicationTests {
 
+    @Test
+    void contextLoads() {
+    }
     @Test
     void test1() throws IOException {
         // 1、获取类路径下对应资源文件，会扫描所有jar包
@@ -24,5 +27,4 @@ class ApplicationTests {
             log.info(resource.toString());
         }
     }
-
 }

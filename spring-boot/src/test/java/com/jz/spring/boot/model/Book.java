@@ -1,4 +1,4 @@
-package com.jz.model;
+package com.jz.spring.boot.model;
 
 import lombok.Builder;
 import lombok.Data;
