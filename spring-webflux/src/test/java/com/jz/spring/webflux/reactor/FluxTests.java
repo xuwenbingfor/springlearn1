@@ -6,8 +6,10 @@ import org.reactivestreams.Subscription;
 import reactor.core.publisher.BaseSubscriber;
 import reactor.core.publisher.Flux;
 
+import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author xuwenbingfor
@@ -16,6 +18,22 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 public class FluxTests {
+    @Test
+    public void testGenerate1() {
+        final AtomicInteger count = new AtomicInteger(1);   // 1
+        Flux.generate(sink -> {
+            sink.next(count.get() + " : " + new Date());   // 2
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if (count.getAndIncrement() >= 5) {
+                sink.complete();     // 3
+            }
+        }).subscribe(System.out::println);  // 4
+    }
+
     @Test
     public void testBackpressure() {
         Flux.range(1, 6)    // 1
