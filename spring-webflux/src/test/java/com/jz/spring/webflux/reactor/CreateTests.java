@@ -19,6 +19,19 @@ import java.util.stream.Stream;
 @Slf4j
 public class CreateTests {
     @Test
+    public void test10() {
+        Flux<String> flux = Flux.generate(
+                () -> 0,
+                (state, sink) -> {
+                    sink.next("3 x " + state + " = " + 3 * state);
+                    if (state == 10) sink.complete();
+                    return state + 1;
+                },
+                (state) -> System.out.println("state: " + state));
+        flux.subscribe(s -> log.info("{}", s));
+    }
+
+    @Test
     public void just() {
         Flux<String> just = Flux.just("a", "b", "c");
 //        just.subscribe(o -> {

@@ -46,7 +46,15 @@
         <dependency>
             <groupId>io.projectreactor</groupId>
             <artifactId>reactor-core</artifactId>
+            <version>3.3.7.RELEASE</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/io.projectreactor.addons/reactor-extra -->
+<!--        <dependency>-->
+<!--            <groupId>io.projectreactor.addons</groupId>-->
+<!--            <artifactId>reactor-extra</artifactId>-->
+<!--        </dependency>-->
+
 
         <dependency>
             <groupId>io.projectreactor</groupId>
