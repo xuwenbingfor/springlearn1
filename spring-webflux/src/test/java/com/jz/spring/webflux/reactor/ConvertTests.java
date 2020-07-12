@@ -38,6 +38,7 @@ public class ConvertTests {
         flux1.map(o -> o.toUpperCase()).subscribe(o -> log.info("o:{}", o));
     }
 
+
     @Test
     public void flatMap() {
         Flux<String> flux1 = Flux.just("a", "a", "b", "c");

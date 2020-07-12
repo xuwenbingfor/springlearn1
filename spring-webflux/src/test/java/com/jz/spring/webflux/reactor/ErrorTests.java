@@ -7,6 +7,7 @@ import reactor.util.retry.Retry;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -16,6 +17,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @Slf4j
 public class ErrorTests {
+    @Test
+    public void test4(){
+    }
+
     @Test
     public void test3() {
         AtomicInteger errorCount = new AtomicInteger();
@@ -60,7 +65,7 @@ public class ErrorTests {
     public void test1() {
         Flux.just(1, 2, 3)
                 .map(v -> {
-                    if (v == 3) {
+                    if (v == 2) {
                         throw new RuntimeException();
                     }
                     return 10 + v;
@@ -69,9 +74,8 @@ public class ErrorTests {
                 .doFinally(v -> log.info("finally:{}", v))
                 .subscribe(v -> log.info("{}", v));
     }
-//    21:54:14.937 [main] INFO com.jz.spring.webflux.reactor.ErrorTests - 11
-//    21:54:14.939 [main] INFO com.jz.spring.webflux.reactor.ErrorTests - 12
-//    21:54:14.946 [main] INFO com.jz.spring.webflux.reactor.ErrorTests - 100
-//    21:54:14.946 [main] INFO com.jz.spring.webflux.reactor.ErrorTests - 101
-//    21:54:14.954 [main] INFO com.jz.spring.webflux.reactor.ErrorTests - finally:onComplete
+//            10:30:09.167 [main] INFO com.jz.spring.webflux.reactor.ErrorTests - 11
+//            10:30:09.173 [main] INFO com.jz.spring.webflux.reactor.ErrorTests - 100
+//            10:30:09.173 [main] INFO com.jz.spring.webflux.reactor.ErrorTests - 101
+//            10:30:09.174 [main] INFO com.jz.spring.webflux.reactor.ErrorTests - finally:onComplete
 }

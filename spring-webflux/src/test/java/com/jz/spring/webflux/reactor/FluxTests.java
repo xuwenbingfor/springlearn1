@@ -5,7 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.reactivestreams.Subscription;
 import reactor.core.publisher.BaseSubscriber;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Random;
@@ -20,6 +22,74 @@ import java.util.function.Function;
  */
 @Slf4j
 public class FluxTests {
+    @Test
+    public void test13() {
+        String key = "message";
+        Mono<String> r = Mono.just("Hello")
+                .flatMap(s -> Mono.subscriberContext()
+                        .map(ctx -> s + " " + ctx.get(key)))
+                .subscriberContext(ctx -> ctx.put(key, "Reactor"))
+                .subscriberContext(ctx -> ctx.put(key, "World"));
+        r.subscribe(o -> log.info("{}", o));
+    }
+
+    @Test
+    public void test12() {
+//        Flux.just(1, 3, 5, 2, 4, 6, 11, 12, 13)
+//                .windowWhile(i -> i % 2 == 0)
+//                .concatMap(g -> g.defaultIfEmpty(-1))
+//                .subscribe(o -> log.info("{}", o));
+
+//        Flux.just(1, 2, 5, 2, 4, 6, 11, 12, 13)
+//                .windowWhile(i -> i % 2 == 0)
+//                .concatMap(g -> g.defaultIfEmpty(-1))
+//                .subscribe(o -> log.info("{}", o));
+
+        Flux.just(2, 2, 5, 2, 4, 6, 11, 12, 13)
+                .windowWhile(i -> i % 2 == 0)
+                .concatMap(g -> g.defaultIfEmpty(-1))
+                .subscribe(o -> log.info("{}", o));
+    }
+
+    @Test
+    public void test11() throws InterruptedException {
+        Flux<String> stringFlux1 = Flux.just("a", "b", "c", "d", "e", "f", "g", "h", "i");
+        Flux<Flux<String>> stringFlux2 = stringFlux1.window(2);
+        stringFlux2.concatMap(flux1 -> flux1.map(word -> word.toUpperCase())
+                .delayElements(Duration.ofMillis(1000)))
+                .subscribe(x -> log.info("->{}", x));
+        Thread.sleep(20 * 1000);
+    }
+
+//15:37:27.152 [parallel-1] INFO com.jz.spring.webflux.reactor.FluxTests - ->A
+//15:37:28.155 [parallel-2] INFO com.jz.spring.webflux.reactor.FluxTests - ->B
+//15:37:29.156 [parallel-3] INFO com.jz.spring.webflux.reactor.FluxTests - ->C
+//15:37:30.157 [parallel-4] INFO com.jz.spring.webflux.reactor.FluxTests - ->D
+//15:37:31.159 [parallel-1] INFO com.jz.spring.webflux.reactor.FluxTests - ->E
+//15:37:32.159 [parallel-2] INFO com.jz.spring.webflux.reactor.FluxTests - ->F
+//15:37:33.161 [parallel-3] INFO com.jz.spring.webflux.reactor.FluxTests - ->G
+//15:37:34.162 [parallel-4] INFO com.jz.spring.webflux.reactor.FluxTests - ->H
+//15:37:35.162 [parallel-1] INFO com.jz.spring.webflux.reactor.FluxTests - ->I
+
+    @Test
+    public void test11_1() throws InterruptedException {
+        Flux<String> stringFlux1 = Flux.just("a", "b", "c", "d", "e", "f", "g", "h", "i");
+        Flux<Flux<String>> stringFlux2 = stringFlux1.window(2);
+        stringFlux2.flatMap(flux1 -> flux1.map(word -> word.toUpperCase())
+                .delayElements(Duration.ofMillis(1000)))
+                .subscribe(x -> log.info("->{}", x));
+        Thread.sleep(20 * 1000);
+    }
+
+//15:35:53.505 [parallel-2] INFO com.jz.spring.webflux.reactor.FluxTests - ->C
+//15:35:53.509 [parallel-2] INFO com.jz.spring.webflux.reactor.FluxTests - ->A
+//15:35:53.509 [parallel-2] INFO com.jz.spring.webflux.reactor.FluxTests - ->E
+//15:35:53.509 [parallel-2] INFO com.jz.spring.webflux.reactor.FluxTests - ->G
+//15:35:53.509 [parallel-2] INFO com.jz.spring.webflux.reactor.FluxTests - ->I
+//15:35:54.506 [parallel-2] INFO com.jz.spring.webflux.reactor.FluxTests - ->H
+//15:35:54.506 [parallel-2] INFO com.jz.spring.webflux.reactor.FluxTests - ->B
+//15:35:54.507 [parallel-3] INFO com.jz.spring.webflux.reactor.FluxTests - ->F
+//15:35:54.510 [parallel-4] INFO com.jz.spring.webflux.reactor.FluxTests - ->D
 
     @Test
     public void test10() {
