@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 
 /**
@@ -22,6 +23,35 @@ import java.util.function.Function;
  */
 @Slf4j
 public class FluxTests {
+    @Test
+    public void test21() {
+        Flux<String> flux = Flux.generate(
+                () -> 0,
+                (state, sink) -> {
+                    sink.next("3 x " + state + " = " + 3 * state);
+                    if (state == 10) sink.complete();
+                    return state + 1;
+                });
+        flux.subscribe(o -> {
+            log.info("{}", o);
+        });
+    }
+
+    @Test
+    public void test22() {
+        Flux<String> flux = Flux.generate(
+                AtomicLong::new,
+                (state, sink) -> {
+                    long i = state.getAndIncrement();
+                    sink.next("3 x " + i + " = " + 3 * i);
+                    if (i == 10) sink.complete();
+                    return state;
+                }, (state) -> System.out.println("state: " + state));
+        flux.subscribe(o -> {
+            log.info("{}", o);
+        });
+    }
+
     @Test
     public void test13() {
         String key = "message";
