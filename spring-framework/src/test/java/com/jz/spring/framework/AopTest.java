@@ -6,14 +6,14 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * @author xuwenbingfor
- * @version 2021/5/12 23:03
+ * @version 2021/5/16 22:51
  * @description
  */
-public class IocTest {
+public class AopTest {
     @Test
     public void test1() {
-        ApplicationContext ac = new ClassPathXmlApplicationContext("classpath:ioc/applicationContext.xml");
-        Car car = ac.getBean(Car.class);
-        car.showInfo();
+        ApplicationContext ac = new ClassPathXmlApplicationContext("classpath:aop/applicationContext.xml");
+        Flyable flyable = (Flyable) ac.getBean("wheel");
+        flyable.fly();
     }
 }
