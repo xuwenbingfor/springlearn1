@@ -79,6 +79,7 @@
         <module>spring-boot</module>
         <module>spring-webflux</module>
         <module>spring-framework</module>
+        <module>spring-webservlet</module>
     </modules>
 
 </project>
